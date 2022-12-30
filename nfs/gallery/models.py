@@ -14,6 +14,7 @@ class Brand(models.Model):
 class Car(models.Model):
     brand = models.ForeignKey(Brand,on_delete=models.PROTECT, verbose_name='Марка')
     photo = models.ImageField(upload_to='media/', verbose_name='Фотография авто')
+    short_description = models.CharField(max_length=100, verbose_name='Краткое описание', default='Описание отсутсвует')
     model = models.CharField(max_length=50, verbose_name='Модель')
     model_year = models.IntegerField(verbose_name='Год выпуска')
 
