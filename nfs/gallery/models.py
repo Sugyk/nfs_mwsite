@@ -4,7 +4,7 @@ from django.db import models
 class Brand(models.Model):
     title = models.CharField(max_length=50, verbose_name='Название бренда')
     country = models.CharField(max_length=50, verbose_name='Страна производитель')
-    description = models.TextField(null=True, verbose_name='Описание')
+    description = models.TextField(verbose_name='Описание', blank=True, null=True)
     logo = models.ImageField(verbose_name='Логотип')
 
     def __str__(self):
@@ -30,7 +30,7 @@ class CarInfo(models.Model):
 class CarNote(models.Model):
     note_id = models.ForeignKey(CarInfo, on_delete=models.CASCADE)
     position = models.IntegerField(verbose_name='Позиция текста')
-    title = models.CharField(max_length=100, null=True, verbose_name='Описание')
+    title = models.CharField(max_length=100, blank=True, null=True, verbose_name='Описание')
     content = models.TextField(verbose_name='Содержание')
 
 
@@ -38,4 +38,4 @@ class CarImage(models.Model):
     note_id = models.ForeignKey(CarInfo, on_delete=models.CASCADE)
     position = models.IntegerField(verbose_name='Позиция картинки')
     image = models.ImageField(verbose_name='Картинка')
-    description = models.CharField(max_length=70, null=True, verbose_name='Описание')
+    description = models.CharField(null=True, max_length=70, blank=True, verbose_name='Описание')

@@ -5,6 +5,11 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Hello world!</h1>
+    <h1>Cars</h1>
+    {% for item in object_list %}
+        {{ item.brand }}
+        <img src="{{ item.brand.logo.url }}" alt="">
+        <img src="{{ item.photo.url }}" alt="">
+    {% endfor %}
 </body>
 </html>
