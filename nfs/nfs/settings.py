@@ -56,7 +56,7 @@ ROOT_URLCONF = 'nfs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -121,7 +121,6 @@ STATIC_URL = 'static/'
 
 STATICFILES_DIRS = [
     BASE_DIR / "static",
-    'D:\Projects\ClearPicturesShop\webshop\static\main_static.css',
 ]
 
 # Default primary key field type

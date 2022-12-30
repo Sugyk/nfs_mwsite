@@ -21,10 +21,11 @@ class CarListView(ListView):
 
 
 class LogoutUser(LogoutView):
-    template_name = 'gallery/logout.html'
+    next_page = reverse_lazy('login')
 
 
 class LoginUser(LoginView):
     template_name = 'gallery/login.html'
     form_class = AuthenticationForm
-    success_url = reverse_lazy('car_list')
+    redirect_authenticated_user = True
+    next_page = reverse_lazy('car_list')

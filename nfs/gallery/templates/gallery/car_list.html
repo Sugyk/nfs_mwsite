@@ -1,15 +1,24 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Document</title>
-</head>
-<body>
-    <h1>Cars</h1>
+{% extends 'base.html' %}
+
+{% block content %}
+    <h1 class="ml-3">Cars</h1>
     {% for item in object_list %}
-        {{ item.brand }}
-        <img src="{{ item.brand.logo.url }}" alt="">
-        <img src="{{ item.photo.url }}" alt="">
+        <div class="card mb-3" style="max-width: 50%;">
+            <div class="row g-0">
+                <div class="col-md">
+                    <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="Упс... Технические шоколадки!">
+                </div>
+                <div class="col-md">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item }}</h5>
+                        <p class="card-text">{{ item.brand.description }}</p>
+                        <p class="card-text"><small class="text-muted">{{ item.model_year }}</small></p>
+                    </div>
+                </div>
+                <div class="col-md-2 d-flex align-items-center">
+                    <img src="{{ item.brand.logo.url }}" alt="">
+                </div>
+            </div>
+        </div>
     {% endfor %}
-</body>
-</html>
+{% endblock %}
