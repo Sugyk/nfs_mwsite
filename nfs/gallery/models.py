@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 
 class Brand(models.Model):
@@ -40,3 +41,9 @@ class CarImage(models.Model):
     position = models.IntegerField(verbose_name='Позиция картинки')
     image = models.ImageField(verbose_name='Картинка')
     description = models.CharField(null=True, max_length=70, blank=True, verbose_name='Описание')
+
+
+class Profile(models.Model):
+    profile = models.OneToOneField(User, on_delete=models.CASCADE)
+    image = models.ImageField(default='default.jpg', upload_to='profile_image/')
+    status = models.CharField(null=True, max_length=90)
