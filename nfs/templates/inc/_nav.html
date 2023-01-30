@@ -26,6 +26,7 @@
 				<li class="nav-item">					
 					<a class="nav-link active" aria-current="page" href="{% url 'login' %}">
 						{% if request.user.is_authenticated %}
+							<img class="nav_image_box" src="{{ user.profile.image.url }}" alt="">
 							{{ user }}
 						{% else %}
 							Account

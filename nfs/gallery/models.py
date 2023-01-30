@@ -1,5 +1,7 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.conf import settings
+from django.db.models.signals import post_save, post_delete
+from django.dispatch import receiver
 
 
 class Brand(models.Model):
@@ -44,6 +46,19 @@ class CarImage(models.Model):
 
 
 class Profile(models.Model):
-    profile = models.OneToOneField(User, on_delete=models.CASCADE)
+    profile = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     image = models.ImageField(default='default.jpg', upload_to='profile_image/')
-    status = models.CharField(null=True, max_length=90)
+    status = models.CharField(null=True, max_length=90, blank=True)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def profile_create(sender, instance, created, **kwargs):
+    print('Creating profile')
+    if created:
+        Profile.objects.create(profile=instance)
+
+
+@receiver(post_save, sender=settings.AUTH_USER_MODEL)
+def profile_save(sender, instance, **kwargs):
+    print('Saving profile', sender, instance, kwargs, instance.profile)
+    instance.profile.save()
