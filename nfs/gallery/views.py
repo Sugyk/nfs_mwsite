@@ -20,6 +20,13 @@ class CarListView(ListView):
     template_name = 'gallery/car_list.html'
 
 
+class BrandListView(ListView):
+    template_name = 'gallery/car_list.html'
+    
+    def get_queryset(self):
+        return Car.objects.filter(brand=self.kwargs.get('brand_id'))
+
+
 class LogoutUser(LogoutView):
     next_page = reverse_lazy('login')
 

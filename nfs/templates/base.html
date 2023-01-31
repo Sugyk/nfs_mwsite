@@ -14,6 +14,13 @@
 </head>
 <body>
     {% include 'inc/_nav.html' %}
-    {% block content %}{% endblock %}
+    <div class="row">
+        <div class="col-3">
+            {% include 'inc/_sidebar.html' %}
+        </div>
+        <div class="col-8">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
 </body>
 </html>

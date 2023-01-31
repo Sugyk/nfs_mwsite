@@ -1,3 +1,8 @@
 .nav_image_box {
     max-width: 3%;
 }
+
+.card_body_margin {
+    padding-bottom: 0;
+    padding-right: 0;
+}

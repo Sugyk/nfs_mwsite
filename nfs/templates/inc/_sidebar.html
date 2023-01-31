@@ -1,0 +1,10 @@
+{% load list_tags %}
+{% get_brands as brands %}
+<div class="list-group">
+    <a class="list-group-item fs-4">Brands</a>
+    {% for item in brands %}
+        {% url 'brand_order' item.pk as path %}
+        <a href="{% url 'brand_order' item.pk %}" class="{% if request.path == path %}active{%endif%} fs-5 list-group-item list-group-item-action">{{ item.title }}</a>
+    {% endfor %}
+</div>
+  
