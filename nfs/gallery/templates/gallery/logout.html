@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block nav %}{% endblock %}
+{% block main_body %}{% endblock %}
+
+{% block content1 %}
+    <div class="position-absolute top-50 start-50 translate-middle">
+        <div class="card text-center">
+            <div class="card-header">
+                You're logged out!
+            </div>
+            <div class="card-body">
+                <p class="card-text">You have choose:</p>
+                <a href="{% url 'car_list' %}">To the main page</a>
+                <br>
+                <a href="{% url 'reg' %}">Register new account</a>
+                <br>
+                <a href="{% url 'login' %}">Log in account</a>
+
+            </div>
+          </div>
+          
+    </div>
+{% endblock %}
