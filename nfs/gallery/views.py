@@ -32,18 +32,19 @@ class ProfileView(DetailView):
     template_name = 'gallery/profile.html'
     model = User
 
-    def get_object(self, *args, **kwargs):
-        return User.objects.get(pk=self.request.user.pk)
-
 
 class ProfileEdit(UpdateView):
     form_class = ProfileEditForm
     model = Profile
     template_name = 'gallery/profile_update.html'
-    success_url = reverse_lazy('profile')
 
     def get_object(self, *args, **kwargs):
         return Profile.objects.get(profile=self.request.user)
+
+    def get_success_url(self):
+        success_url = reverse_lazy('profile', args=[self.request.user.pk])
+        print(success_url)
+        return success_url
 
 
 # def ProfileEdit(request):

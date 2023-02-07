@@ -18,7 +18,7 @@
 							<img class="nav_image_box" src="{{ user.profile.image.url }}" alt="">{{ user }}
 						</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+							<li><a class="dropdown-item" href="{% url 'profile' user.pk %}">Profile</a></li>
 							<li><a class="dropdown-item" href="#">Another action</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
