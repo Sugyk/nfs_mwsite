@@ -1,9 +1,9 @@
 .nav_image_box {
-    max-width: 25px;
+    max-height: 20px;
+    border-radius: 50%;
 }
 
 .card_body_margin {
     padding-bottom: 0;
     padding-right: 0;
 }
-

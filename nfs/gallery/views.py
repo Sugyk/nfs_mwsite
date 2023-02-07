@@ -1,13 +1,19 @@
-from django.shortcuts import render
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView
+from django.views.generic.edit import CreateView, UpdateView
+
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+
 from django.urls import reverse_lazy
+
+from django.shortcuts import render
+
 from django.conf import settings
-from .models import Car
+
+from .models import Car, Profile
+from .forms import ProfileEditForm
 
 
 class CarListView(ListView):
@@ -25,6 +31,25 @@ class BrandListView(ListView):
 class ProfileView(DetailView):
     template_name = 'gallery/profile.html'
     model = User
+
+    def get_object(self, *args, **kwargs):
+        return User.objects.get(pk=self.request.user.pk)
+
+
+class ProfileEdit(UpdateView):
+    form_class = ProfileEditForm
+    model = Profile
+    template_name = 'gallery/profile_update.html'
+    success_url = reverse_lazy('profile')
+
+    def get_object(self, *args, **kwargs):
+        return Profile.objects.get(profile=self.request.user)
+
+
+# def ProfileEdit(request):
+#     if request.method == 'GET':
+#         print(ProfileEditForm(instance=request.user))
+#         return render(request, 'gallery/profile_update.html', context={'form': ProfileEditForm(instance=request.user)})
 
 
 class UserCreateView(CreateView):

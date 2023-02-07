@@ -47,15 +47,17 @@ class CarImage(models.Model):
 
 class Profile(models.Model):
     profile = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    name = models.CharField(max_length=30, blank=True)
+    email = models.EmailField(blank=True)
     image = models.ImageField(default='default.jpg', upload_to='profile_image/')
     status = models.CharField(null=True, max_length=90, blank=True)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)
 def profile_create(sender, instance, created, **kwargs):
-    print('Creating profile')
     if created:
-        Profile.objects.create(profile=instance)
+        print('Creating profile')
+        Profile.objects.create(email = instance.email, profile=instance)
 
 
 @receiver(post_save, sender=settings.AUTH_USER_MODEL)

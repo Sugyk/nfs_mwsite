@@ -6,20 +6,23 @@
 <ul class="list-group list-group-flush text-center">
     <li class="list-group-item"><img src="{{ object.profile.image.url }}" alt="" width="30%"></li>
     <li class="list-group-item">
-        <strong>Username:</strong>
+        <strong>Login:</strong>
         {{ object.username }}
     </li>
     <li class="list-group-item">
-        <strong>First name:</strong>
-        {{ object.first_name }}
+        <strong>Username:</strong>
+        {{ object.profile.name }}
     </li>
     <li class="list-group-item">
-        <strong>Last name:</strong>
-        {{ object.last_name }}
+        <strong>Status:</strong>
+        {{ object.profile.status }}
     </li>
     <li class="list-group-item">
         <strong>E-mail:</strong>
-        {{ object.email }}
+        {{ object.profile.email }}
     </li>
-  </ul>
+</ul>
+<div class="mx-auto" style="width: min-content">
+    <a type="button" class="btn btn-secondary" href="{% url 'profile_update' %}">Edit</a>
+</div>
 {% endblock %}

@@ -7,7 +7,7 @@
 		<div class="collapse navbar-collapse" id="navbarSupportedContent">
 			<ul class="navbar-nav me-auto mb-2 mb-lg-0">
 				<li class="nav-item">
-					<a class="nav-link active" aria-current="page" href="{% url 'car_list' %}">Home</a>
+					<a class="nav-link active" aria-current="page" href="{% url 'car_list' %}">Cars</a>
 				</li>
 				<li class="nav-item">
 					<a class="nav-link" href="#">Link</a>
@@ -18,7 +18,7 @@
 							<img class="nav_image_box" src="{{ user.profile.image.url }}" alt="">{{ user }}
 						</a>
 						<ul class="dropdown-menu">
-							<li><a class="dropdown-item" href="{% url 'profile' user.pk %}">Profile</a></li>
+							<li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
 							<li><a class="dropdown-item" href="#">Another action</a></li>
 							<li><hr class="dropdown-divider"></li>
 							<li><a class="dropdown-item" href="{% url 'logout' %}">Log out</a></li>
