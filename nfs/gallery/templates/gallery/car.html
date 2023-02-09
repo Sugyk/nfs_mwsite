@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="border border-light-subtle rounded m-3">
+        <h2 class="m-4">
+            {{ object.brand }} {{ object.model }} 
+            <small>{{ object.model_year }}</small>
+        </h2>
+        <div>
+            <img class="ms-4 w-50" src="{{ object.photo.url }}" alt="">
+            <p class="d-inline-block">
+                {{ object.short_description }}
+            </p>
+        </div>
+        <p class="fs-4 m-3">
+            Last articles about this car:
+        </p>
+        <div class="card text-center" style="max-width: fit-content;">
+            <div class="card-group">
+                <div class="card" style="display: block;">
+                    <a href="{% url 'new_article' object.pk %}">
+                        <img src="{% static 'plus.svg' %}" class="card-img-top m-5" style="height: 30px; width: 30px">
+                        <div class="card-body">
+                            <h5 class="card-title">Create article</h5>
+                        </div>
+                    </a>
+                </div>
+                {% for item in articles %}
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title">{{ item.title }}</h5>
+                        <p class="fw-light mb-0">{{ item.created_at|date:"Y:m:d" }}</p>
+                        <p class="fw-light text-muted">Updated: {{ item.updated_at|date:"Y:m:d" }}</p>
+                        <a href="#" class="btn btn-primary">Read</a>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="card-footer text-muted">
+              More...
+            </div>
+        </div>
+    </div>
+{% endblock %}

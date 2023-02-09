@@ -6,11 +6,15 @@
         <div class="card mb-3">
             <div class="row g-0">
                 <div class="col-md">
-                    <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="Упс... Технические шоколадки!">
+                    <a href="{% url 'car' item.pk %}">
+                        <img src="{{ item.photo.url }}" class="img-fluid rounded-start" alt="Упс... Технические шоколадки!">
+                    </a>
                 </div>
                 <div class="col-md">
                     <div class="card-body card_body_margin">
-                        <h5 class="card-title">{{ item }}</h5>
+                        <a href="{% url 'car' item.pk %}">
+                            <h5 class="card-title">{{ item }}</h5>
+                        </a>
                         <p class="card-text">{{ item.short_description }}</p>
                         <p class="card-text"><small class="text-muted">{{ item.model_year }}</small></p>
                     </div>

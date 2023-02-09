@@ -12,8 +12,18 @@ from django.shortcuts import render
 
 from django.conf import settings
 
-from .models import Car, Profile
-from .forms import ProfileEditForm
+from .models import Car, Profile, CarInfo
+from .forms import ProfileEditForm, ArticleCreateForm
+
+
+class CarView(DetailView):
+    model = Car
+    template_name = 'gallery/car.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['articles'] = CarInfo.objects.all().order_by('-created_at')[:4]
+        return data
 
 
 class CarListView(ListView):
@@ -43,14 +53,7 @@ class ProfileEdit(UpdateView):
 
     def get_success_url(self):
         success_url = reverse_lazy('profile', args=[self.request.user.pk])
-        print(success_url)
         return success_url
-
-
-# def ProfileEdit(request):
-#     if request.method == 'GET':
-#         print(ProfileEditForm(instance=request.user))
-#         return render(request, 'gallery/profile_update.html', context={'form': ProfileEditForm(instance=request.user)})
 
 
 class UserCreateView(CreateView):
@@ -69,3 +72,27 @@ class LoginUser(LoginView):
 
 class LogoutUser(LogoutView):
     template_name = 'gallery/logout.html'
+
+
+class ArticleCreateView(CreateView):
+    model = CarInfo
+    form_class = ArticleCreateForm
+    success_url = reverse_lazy('car_list')
+    template_name = 'gallery/article_create.html'
+
+    def get_form_kwargs(self):
+        data = super().get_form_kwargs()
+        if self.request.method in ('POST', 'PUT'):
+            car = Car.objects.get(pk=self.kwargs.get('pk'))
+            is_published = True
+            author = self.request.user
+            qdict = data['data'].copy()
+            qdict['car'] = car
+            qdict['is_published'] = is_published
+            qdict['author'] = author
+            data['data'] = qdict
+        return data
+    
+    def get_success_url(self):
+        url = reverse_lazy('article', args=[self.object.pk])
+        return url

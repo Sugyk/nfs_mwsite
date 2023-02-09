@@ -26,9 +26,15 @@ class Car(models.Model):
 
 
 class CarInfo(models.Model):
+    title = models.CharField(max_length=30, blank=False, null='', default='')
     car = models.ForeignKey(Car, on_delete=models.CASCADE)
+    is_published = models.BooleanField(default=False)
+    author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
     created_at = models.DateTimeField(auto_now_add=True, verbose_name='Дата добавления')
     updated_at = models.DateTimeField(auto_now=True, verbose_name='Дата обновления')
+
+    def __str__(self) -> str:
+        return self.title
 
 
 class CarNote(models.Model):
