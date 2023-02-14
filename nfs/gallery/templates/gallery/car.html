@@ -32,7 +32,7 @@
                         <h5 class="card-title">{{ item.title }}</h5>
                         <p class="fw-light mb-0">{{ item.created_at|date:"Y:m:d" }}</p>
                         <p class="fw-light text-muted">Updated: {{ item.updated_at|date:"Y:m:d" }}</p>
-                        <a href="#" class="btn btn-primary">Read</a>
+                        <a href="{% url 'article' item.pk %}" class="btn btn-primary">Read</a>
                     </div>
                 </div>
                 {% endfor %}

@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import  Car, Brand, Profile, CarInfo
+from .models import  Car, Brand, Profile, CarInfo, CarNote, CarImage
 from django.conf import settings
 from django.contrib.auth.models import User
 
@@ -20,3 +20,6 @@ admin.site.register(Brand)
 admin.site.unregister(User)
 admin.site.register(User, UserAdmin)
 admin.site.register(CarInfo)
+admin.site.register(CarNote)
+admin.site.register(CarImage)
+

@@ -1,6 +1,6 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -8,12 +8,12 @@ from django.contrib.auth.views import LoginView, LogoutView
 
 from django.urls import reverse_lazy
 
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 
 from django.conf import settings
 
-from .models import Car, Profile, CarInfo
-from .forms import ProfileEditForm, ArticleCreateForm
+from .models import Car, Profile, CarInfo, CarNote, CarImage
+from .forms import ProfileEditForm, ArticleCreateForm, NotesFormset
 
 
 class CarView(DetailView):
@@ -96,3 +96,45 @@ class ArticleCreateView(CreateView):
     def get_success_url(self):
         url = reverse_lazy('article', args=[self.object.pk])
         return url
+
+
+class ArticleView(DetailView):
+    model = CarInfo
+    template_name = 'gallery/article.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['form'] = NotesFormset(queryset=CarNote.objects.filter(note_id=self.kwargs.get('pk')))
+        return data
+
+
+class ArticleEditView(UpdateView):
+    template_name = 'gallery/article_edit.html'
+    form_class = NotesFormset
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return CarInfo.objects.get(pk=pk)
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        queryset = CarNote.objects.filter(note_id=pk)
+        return queryset
+    
+    def get_form_kwargs(self):
+        data = super().get_form_kwargs()
+        data.pop('instance')
+        data.update({'queryset': self.get_queryset()})
+        return data
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        object = CarInfo.objects.get(pk=pk)
+        data['object'] = object
+        return data
+    
+    def get_success_url(self):
+        pk = self.kwargs.get('pk')
+        return reverse_lazy('article_edit', args=[pk])
+
