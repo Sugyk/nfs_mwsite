@@ -10,7 +10,12 @@ from django.urls import reverse_lazy
 
 from django.shortcuts import render, redirect
 
+from django.db.models import F
+
+
 from django.conf import settings
+
+from django.http import HttpResponseNotAllowed
 
 from .models import Car, Profile, CarInfo, CarNote, CarImage
 from .forms import ProfileEditForm, ArticleCreateForm, NotesFormset
@@ -118,7 +123,7 @@ class ArticleEditView(UpdateView):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
-        queryset = CarNote.objects.filter(note_id=pk)
+        queryset = CarNote.objects.filter(note_id=pk).order_by('position')
         return queryset
     
     def get_form_kwargs(self):
@@ -138,3 +143,38 @@ class ArticleEditView(UpdateView):
         pk = self.kwargs.get('pk')
         return reverse_lazy('article_edit', args=[pk])
 
+
+def add(request, pk):
+    object = CarInfo.objects.get(pk=pk)
+    if request.method == 'GET':
+        ...
+    if request.method == 'POST':
+        print(request.POST)
+        position = int(request.POST.get('position'))
+        if request.POST.get('type') == 'note':
+            CarNote.objects.create(position=position, note_id=object)
+        if request.POST.get('type') == 'image':
+            CarImage.objects.create(position=position, note_id=object)
+
+        CarNote.objects.filter(position__gte=position).update(position=F('position') + 1)
+        CarImage.objects.filter(position__gte=position).update(position=F('position') + 1)
+        
+    queryset = CarNote.objects.filter(note_id=pk)
+    last_pos = len(queryset)
+    context = {
+        'object': object,
+        'queryset': queryset,
+        'last_pos': last_pos,
+    }
+    return render(request, 'gallery/article_add_record.html', context=context)
+
+
+def add_note(request, pk):
+    object = CarInfo.objects.get(pk=pk)
+    if request.method == 'POST':
+        return redirect(reverse_lazy('article_new_record', args=[pk]))
+    return HttpResponseNotAllowed(['post'])
+
+
+def add_image(request):
+    ...

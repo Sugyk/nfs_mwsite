@@ -1,0 +1,85 @@
+{% extends 'base.html' %}
+{% load article_tags %}
+
+{% block content %}
+<div class="container border rounded m-3 p-4">
+    <h2>{{ object|capfirst }}</h2>
+    <p>
+        Car:
+        <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
+    </p>
+    <p class="m-0">Author: <span class="text-muted">{{ user }}</span></p>
+    <br>
+
+    {% get_notes_and_images object.pk as list %}
+
+    {% for item in list %}
+    <form action="" method="post" class="fs-6">
+        {% csrf_token %}
+        <input type="hidden" name="position" value="{{ item.position }}">
+        <div class="mx-auto" style="width: fit-content;">
+            <div class="input-group m-0">
+                <div class="input-group-text border border-2 border-success text-center bg-info bg-opacity-10">Add record</div>
+                <div class="input-group-text border border-2 border-success text-center bg-info bg-opacity-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="type_radio_id_1" value="note" checked>
+                        <label class="form-check-label" for="type_radio_id_1">Note</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="type_radio_id_2" value="image">
+                        <label class="form-check-label" for="type_radio_id_2">Image</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-success p-0 ps-1 pe-1 border-2 border-success">Add</button>
+            </div>
+        </div>
+    </form>
+    <div>
+        {% if item.content %}
+        <div class="container border rounded border-2 border-info border-opacity-50 bg-info bg-opacity-10">
+            Title:
+            <h4 class="mt-2 border border-2 border-info border-opacity-50" >{{ item.title }}</h4>
+            Content:
+            <div class="mb-2 border border-2 border-info border-opacity-50">
+                {{ item.content}}
+            </div>
+        </div>
+        {% else %}
+        <div class="container border rounded border-2 border-info border-opacity-50 bg-info bg-opacity-10">
+            Image:
+            <div>
+                <img src="{{ item.image.url }}" alt="Изображение отсутствует.">
+            </div>
+            Description:
+            <div class="mb-2 border border-2 border-info border-opacity-50">
+                {{ item.description}}
+            </div>
+        </div>
+        {% endif %}
+    </div>
+    {% endfor %}
+
+    <form action="" method="post" class="fs-6">
+        {% csrf_token %}
+        <input type="hidden" name="position" value="{{ last_pos }}">
+        <div class="mx-auto" style="width: fit-content;">
+            <div class="input-group m-0">
+                <div class="input-group-text border border-2 border-success text-center bg-info bg-opacity-10">Add record</div>
+                <div class="input-group-text border border-2 border-success text-center bg-info bg-opacity-10">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="type_radio_id_1" value="note" checked>
+                        <label class="form-check-label" for="type_radio_id_1">Note</label>
+                    </div>
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="radio" name="type" id="type_radio_id_2" value="image">
+                        <label class="form-check-label" for="type_radio_id_2">Image</label>
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-outline-success p-0 ps-1 pe-1">Add</button>
+            </div>
+        </div>
+    </form>
+    <a href="{% url 'article_edit' object.pk %}" class="btn btn-outline-success">Return to editing</a>
+    <a href="{% url 'article' object.pk %}" class="btn btn-outline-success">Open to read</a>
+</div>
+{% endblock%}

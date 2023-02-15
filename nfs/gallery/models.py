@@ -40,15 +40,17 @@ class CarInfo(models.Model):
 class CarNote(models.Model):
     note_id = models.ForeignKey(CarInfo, on_delete=models.CASCADE)
     position = models.IntegerField(verbose_name='Позиция текста')
-    title = models.CharField(max_length=100, blank=True, null=True, verbose_name='Описание')
-    content = models.TextField(verbose_name='Содержание')
+    title = models.CharField(max_length=100, blank=True, null='', default='', verbose_name='Описание')
+    content = models.TextField(verbose_name='Содержание', blank=True, null='', default='')
+    image = models.ImageField(blank=True, null='', default='plug.jpg', verbose_name='Картинка')
+    description = models.CharField(null='', default='', max_length=70, blank=True, verbose_name='Описание')
 
 
 class CarImage(models.Model):
     note_id = models.ForeignKey(CarInfo, on_delete=models.CASCADE)
     position = models.IntegerField(verbose_name='Позиция картинки')
-    image = models.ImageField(verbose_name='Картинка')
-    description = models.CharField(null=True, max_length=70, blank=True, verbose_name='Описание')
+    image = models.ImageField(blank=True, null='', default='plug.jpg', verbose_name='Картинка')
+    description = models.CharField(null='', default='', max_length=70, blank=True, verbose_name='Описание')
 
 
 class Profile(models.Model):

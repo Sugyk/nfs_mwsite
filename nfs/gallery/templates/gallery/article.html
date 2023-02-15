@@ -2,15 +2,15 @@
 {% load article_tags %}
 
 {% block content %}
-<div class="container border rounded m-3">
-    <h1>{{ object }}</h1>
+<div class="container border rounded m-3 p-4">
+    <h2>{{ object|capfirst }}</h2>
     <p>
         Car:
         <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
     </p>
     <p class="m-0">Author: <span class="text-muted">{{ user }}</span></p>
     <br>
-    <a href="{% url 'article_edit' object.pk %}">You can edit this post</a>
+    <a href="{% url 'article_edit' object.pk %}" class="btn btn-outline-success">You can edit this post</a>
     {% for item in object.carnote_set.all %}
     <div>
         <h4>
