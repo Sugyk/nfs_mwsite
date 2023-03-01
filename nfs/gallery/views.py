@@ -1,12 +1,17 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView
+from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView
+from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
+from django.contrib import messages
 
 from django.urls import reverse_lazy
+
 
 from django.shortcuts import render, redirect
 
@@ -17,7 +22,7 @@ from django.conf import settings
 
 from django.http import HttpResponseNotAllowed
 
-from .models import Car, Profile, CarInfo, CarNote, CarImage
+from .models import Car, Profile, CarInfo, CarNote
 from .forms import ProfileEditForm, ArticleCreateForm, NotesFormset
 
 
@@ -43,6 +48,7 @@ class BrandListView(ListView):
         return Car.objects.filter(brand=self.kwargs.get('brand_id'))
 
 
+@method_decorator(login_required(login_url=reverse_lazy('login')), name='dispatch')
 class ProfileView(DetailView):
     template_name = 'gallery/profile.html'
     model = User
@@ -79,6 +85,7 @@ class LogoutUser(LogoutView):
     template_name = 'gallery/logout.html'
 
 
+@method_decorator(login_required(login_url=reverse_lazy('login')), name='dispatch')
 class ArticleCreateView(CreateView):
     model = CarInfo
     form_class = ArticleCreateForm
@@ -113,6 +120,7 @@ class ArticleView(DetailView):
         return data
 
 
+@method_decorator(login_required(login_url=reverse_lazy('login')), name='dispatch')
 class ArticleEditView(UpdateView):
     template_name = 'gallery/article_edit.html'
     form_class = NotesFormset
@@ -123,7 +131,7 @@ class ArticleEditView(UpdateView):
 
     def get_queryset(self):
         pk = self.kwargs.get('pk')
-        queryset = CarNote.objects.filter(note_id=pk).order_by('position')
+        queryset = CarNote.objects.filter(note_id=pk).order_by('-position')
         return queryset
     
     def get_form_kwargs(self):
@@ -146,35 +154,18 @@ class ArticleEditView(UpdateView):
 
 def add(request, pk):
     object = CarInfo.objects.get(pk=pk)
-    if request.method == 'GET':
-        ...
     if request.method == 'POST':
-        print(request.POST)
         position = int(request.POST.get('position'))
-        if request.POST.get('type') == 'note':
+        queryset = CarNote.objects.filter(note_id=pk)
+        if position in range(len(queryset) + 1):
+            CarNote.objects.filter(position__gte=position).update(position=F('position') + 1)
             CarNote.objects.create(position=position, note_id=object)
-        if request.POST.get('type') == 'image':
-            CarImage.objects.create(position=position, note_id=object)
-
-        CarNote.objects.filter(position__gte=position).update(position=F('position') + 1)
-        CarImage.objects.filter(position__gte=position).update(position=F('position') + 1)
-        
-    queryset = CarNote.objects.filter(note_id=pk)
+        else:
+            messages.error(request, 'Document deleted.')
+    context = {'object': object}
+    queryset = CarNote.objects.filter(note_id=pk).order_by('position')
     last_pos = len(queryset)
-    context = {
-        'object': object,
-        'queryset': queryset,
-        'last_pos': last_pos,
-    }
+    context['last_pos'] = last_pos
+    context['queryset'] = queryset
+    
     return render(request, 'gallery/article_add_record.html', context=context)
-
-
-def add_note(request, pk):
-    object = CarInfo.objects.get(pk=pk)
-    if request.method == 'POST':
-        return redirect(reverse_lazy('article_new_record', args=[pk]))
-    return HttpResponseNotAllowed(['post'])
-
-
-def add_image(request):
-    ...

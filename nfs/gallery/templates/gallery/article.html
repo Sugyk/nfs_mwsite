@@ -1,23 +1,29 @@
 {% extends 'base.html' %}
-{% load article_tags %}
 
 {% block content %}
 <div class="container border rounded m-3 p-4">
-    <h2>{{ object|capfirst }}</h2>
-    <p>
-        Car:
-        <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
-    </p>
-    <p class="m-0">Author: <span class="text-muted">{{ user }}</span></p>
-    <br>
-    <a href="{% url 'article_edit' object.pk %}" class="btn btn-outline-success">You can edit this post</a>
+    {% include 'gallery/inc/_header.html' %}
     {% for item in object.carnote_set.all %}
     <div>
         <h4>
             {{ item.title }}
         </h4>
-        {{ item.content}}
+        {{ item.content }}
+        <div style="width: min-content;" class="">
+            {% if item.image.url != '/media/plug.jpg' %}
+            <a href="{{ item.image.url }}">
+                <img src="{{ item.image.url }}" alt="" style="width: 400px;" class="mb-2">
+            </a>
+            {% endif %}
+            <p class="mx-auto text-center text-muted" style="word-wrap: break-word; width: 300px; font-size: smaller;">
+                {{ item.description }}
+            </p>
+        </div>
     </div>
     {% endfor %}
+    {% if user == object.author %}
+    <a href="{% url 'article_edit' object.pk %}" class="btn btn-outline-success">You can edit this post</a>
+    <a href="#" class="btn btn-outline-danger">Delete post</a>
+    {% endif %}
 </div>
 {% endblock%}

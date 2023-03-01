@@ -1,0 +1,7 @@
+<h2>{{ object|capfirst }}</h2>
+<p class="mb-0">
+    Car:
+    <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
+</p>
+<p class="m-0">Author: <span class="text-muted">{{ object.author }}</span></p>
+<br>

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     CarListView, UserCreateView, LoginUser, LogoutUser,
     BrandListView, ProfileView, ProfileEdit, CarView, ArticleCreateView,
-    ArticleView, ArticleEditView, add, add_note
+    ArticleView, ArticleEditView, add
     )
 
 
@@ -14,10 +14,7 @@ urlpatterns = [
     path('article/<int:pk>', ArticleView.as_view(), name='article'),
 
     path('article/<int:pk>/edit', ArticleEditView.as_view(), name='article_edit'),
-    # path('article/<int:pk>/new_note', ArticleAddNoteView.as_view(), name='article_new_note'),
-    path('article/<int:pk>/new_record', add, name='article_new_record'),
-    path('article/<int:pk>/new_note', add_note, name='article_new_note'),
-
+    path('article/<int:pk>/new_note', add, name='article_new_note'),
     
     path('brand/<int:brand_id>', BrandListView.as_view(), name='brand_order'),
     

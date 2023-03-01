@@ -1,39 +1,37 @@
 {% extends 'base.html' %}
-{% load article_tags %}
 
 {% block content %}
 <div class="container border rounded m-3 p-4">
-    <h2>{{ object|capfirst }}</h2>
-    <p>
-        Car:
-        <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
-    </p>
-    <p class="m-0">Author: <span class="text-muted">{{ user }}</span></p>
-    <br>
+    {% include 'gallery/inc/_header.html' %}
+    
     {% if form.queryset %}
-    <form action="" method="post">
+    <form action="" method="post" enctype="multipart/form-data">
         {% csrf_token %}
         {{ form.management_form }}
-        {% for item in form %}
+        {% for item in form reversed %}
         <div class="container border rounded border-3 border-warning mb-2">
             {{ item.errors }}
-            <label for="{{ item.title.id_for_label }}">Заголовок:</label>
+            <label for="{{ item.title.id_for_label }}">Title:</label>
             {{ item.title }}
-            <label for="{{ item.content.id_for_label }}">Содержание:</label>
+            <label for="{{ item.content.id_for_label }}">Content:</label>
             {{ item.content }}
+            <label for="{{ item.image.id_for_label }}">Image: {{ item.image.value }}</label>
+            {{ item.image }}
+            <label for="{{ item.decription.id_for_label }}">Description:</label>
+            {{ item.description }}
             {{ item.position }}
             {{ item.note_id }}
             {{ item.id }}
             <input type="checkbox" name="{{ item.prefix }}-DELETE" id="id_{{ item.prefix }}-{{ item.DELETE.name }}" class="btn-check">
-            <label class="btn btn-outline-danger m-2" for="{{ item.DELETE.id_for_label }}">Delete record</label>
+            <label class="btn btn-outline-danger m-2" for="{{ item.DELETE.id_for_label }}">Delete note</label>
         </div>
         {% endfor %}
         <button type="submit" class="btn btn-success">Save</button>
-        <a href="{% url 'article_new_record' object.pk %}" class="btn btn-outline-success">Create records</a>
+        <a href="{% url 'article_new_note' object.pk %}" class="btn btn-outline-success">Create notes</a>
         <a href="{% url 'article' object.pk %}" class="btn btn-outline-info">Open to read</a>
     </form>
     {% else %}
-        <p class="text-muted">There are no records yet. <a href="{% url 'article_new_record' object.pk %}">You can create them</a></p>
+        <p class="text-muted">There are no notes yet. <a href="{% url 'article_new_note' object.pk %}">You can create them</a></p>
     {% endif %}
 
 </div>

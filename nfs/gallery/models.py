@@ -1,7 +1,6 @@
-from django.db import models
 from django.conf import settings
-from django.db.models.signals import post_save, post_delete
-from django.dispatch import receiver
+
+from django.db import models
 
 
 class Brand(models.Model):
@@ -42,16 +41,9 @@ class CarNote(models.Model):
     position = models.IntegerField(verbose_name='Позиция текста')
     title = models.CharField(max_length=100, blank=True, null='', default='', verbose_name='Описание')
     content = models.TextField(verbose_name='Содержание', blank=True, null='', default='')
-    image = models.ImageField(blank=True, null='', default='plug.jpg', verbose_name='Картинка')
+    image = models.ImageField(blank=True, default='plug.jpg', verbose_name='Картинка')
     description = models.CharField(null='', default='', max_length=70, blank=True, verbose_name='Описание')
-
-
-class CarImage(models.Model):
-    note_id = models.ForeignKey(CarInfo, on_delete=models.CASCADE)
-    position = models.IntegerField(verbose_name='Позиция картинки')
-    image = models.ImageField(blank=True, null='', default='plug.jpg', verbose_name='Картинка')
-    description = models.CharField(null='', default='', max_length=70, blank=True, verbose_name='Описание')
-
+    
 
 class Profile(models.Model):
     profile = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
@@ -60,15 +52,3 @@ class Profile(models.Model):
     image = models.ImageField(default='default.jpg', upload_to='profile_image/')
     status = models.CharField(null=True, max_length=90, blank=True)
 
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def profile_create(sender, instance, created, **kwargs):
-    if created:
-        print('Creating profile')
-        Profile.objects.create(email = instance.email, profile=instance)
-
-
-@receiver(post_save, sender=settings.AUTH_USER_MODEL)
-def profile_save(sender, instance, **kwargs):
-    print('Saving profile', sender, instance, kwargs, instance.profile)
-    instance.profile.save()
