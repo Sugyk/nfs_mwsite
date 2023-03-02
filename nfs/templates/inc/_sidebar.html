@@ -4,7 +4,12 @@
     <a class="list-group-item fs-4">Brands</a>
     {% for item in brands %}
         {% url 'brand_order' item.pk as path %}
-        <a href="{% url 'brand_order' item.pk %}" class="{% if request.path == path %}active{%endif%} fs-5 list-group-item list-group-item-action">{{ item.title }}</a>
+        <a href="{% url 'brand_order' item.pk %}" class="{% if request.path == path %}active{%endif%} fs-5 list-group-item list-group-item-action">
+            {{ item.title }} 
+            <span class="badge rounded-pill text-bg-secondary">
+                {{ item.car_set.count }}
+            </span>
+        </a>
     {% endfor %}
 </div>
   
