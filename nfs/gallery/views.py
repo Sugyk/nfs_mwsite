@@ -13,7 +13,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 
 
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.db.models import F
 
@@ -95,7 +95,7 @@ class ArticleCreateView(CreateView):
     def get_form_kwargs(self):
         data = super().get_form_kwargs()
         if self.request.method in ('POST', 'PUT'):
-            car = Car.objects.get(pk=self.kwargs.get('pk'))
+            car = get_object_or_404(Car, pk=self.kwargs.get('pk'))
             is_published = True
             author = self.request.user
             qdict = data['data'].copy()
@@ -103,6 +103,11 @@ class ArticleCreateView(CreateView):
             qdict['is_published'] = is_published
             qdict['author'] = author
             data['data'] = qdict
+        return data
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['object'] = get_object_or_404(Car, pk=self.kwargs.get('pk'))
         return data
     
     def get_success_url(self):

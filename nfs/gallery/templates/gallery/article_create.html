@@ -2,7 +2,7 @@
 
 {% block content %}
     <h2>
-        Creating article for ...:
+        Creating article for <a href="{% url 'car' object.pk %}" class="text-decoration-none">{{ object }}:</a>
     </h2>
     <form action="" method="post">
         {% csrf_token %}
