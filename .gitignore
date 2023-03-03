@@ -1,2 +1,5 @@
-/venv/
+venv/
 nfs/media/
+
+**/__pycache__/
+nfs/db.sqlite3
