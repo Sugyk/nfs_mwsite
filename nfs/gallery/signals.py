@@ -26,3 +26,8 @@ def profile_save(sender, instance, **kwargs):
 def note_deleting(*args, **kwargs):
     instance = kwargs.get('instance')
     CarNote.objects.filter(position__gt=instance.position, note_id=instance.note_id).update(position=F('position') - 1)
+
+
+@receiver(post_save, sender=CarNote)
+def updated_at_activate(*args, **kwargs):
+    kwargs.get('instance').note_id.save()
