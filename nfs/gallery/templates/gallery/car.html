@@ -8,10 +8,10 @@
             <small>{{ object.model_year }}</small>
         </h2>
         <div>
-            <img class="ms-4 w-50" src="{{ object.photo.url }}" alt="">
-            <p class="d-inline-block">
+            <div class="row">
+                <img class="ms-4 w-50" src="{{ object.photo.url }}" alt="">
                 {{ object.short_description }}
-            </p>
+            </div>
         </div>
         <p class="fs-4 m-3">
             Last articles about this car:
@@ -30,16 +30,23 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title">{{ item.title }}</h5>
-                        <p class="fw-light mb-0">{{ item.created_at|date:"Y:m:d" }}</p>
-                        <p class="fw-light text-muted">Updated: {{ item.updated_at|date:"Y:m:d" }}</p>
+                        <p class="fw-light text-muted">Author:<br>
+                            <a href="#" class="text-decoration-none">
+                                {{ item.author }}
+                            </a>
+                            {% if item.author == user %}
+                            <span class="badge bg-success">You</span>
+                            {% endif %}
+                        </p>
+                        <p class="fw-light text-muted">Last update: {{ item.updated_at|date:"Y:m:d" }}</p>
                         <a href="{% url 'article' item.pk %}" class="btn btn-primary">Read</a>
                     </div>
                 </div>
                 {% endfor %}
             </div>
-            <div class="card-footer text-muted">
-              More...
-            </div>
+            <a href="{% url 'article_list' object.pk %}" class="p-2 list-group-item list-group-item-action list-group-item-primary">
+                More...
+            </a>        
         </div>
     </div>
 {% endblock %}
