@@ -113,6 +113,24 @@ class ArticleCreateView(CreateView):
     def get_success_url(self):
         url = reverse_lazy('article', args=[self.object.pk])
         return url
+    
+
+class ArticleList(ListView):
+    template_name = 'gallery/article_list.html'
+    
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        return get_object_or_404(Car, pk=pk)
+
+    def get_queryset(self):
+        object = self.get_object()
+        queryset = CarInfo.objects.filter(car=object).order_by('-created_at')
+        return queryset
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data['object'] = self.get_object()
+        return data
 
 
 class ArticleView(DetailView):

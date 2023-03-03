@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     CarListView, UserCreateView, LoginUser, LogoutUser,
     BrandListView, ProfileView, ProfileEdit, CarView, ArticleCreateView,
-    ArticleView, ArticleEditView, add
+    ArticleView, ArticleEditView, add, ArticleList
     )
 
 
@@ -12,6 +12,7 @@ urlpatterns = [
 
     path('<int:pk>/create', ArticleCreateView.as_view(), name='new_article'),
     path('article/<int:pk>', ArticleView.as_view(), name='article'),
+    path('articles/car/<int:pk>', ArticleList.as_view(), name='article_list'),
 
     path('article/<int:pk>/edit', ArticleEditView.as_view(), name='article_edit'),
     path('article/<int:pk>/new_note', add, name='article_new_note'),
