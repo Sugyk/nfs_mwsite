@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Sign in{% endblock%}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'styles.css' %}">
+    <link rel="stylesheet" href="{% static 'bootstrap.min.css' %}">
+    <script src="{% static 'bootstrap.bundle.min.js' %}"></script>
+    <script src="{% static 'bootstrap.esm.min.js' %}"></script>
+</head>
+<body>
+    <div class="position-absolute top-50 start-50 translate-middle text-center">
+        <div class="card">
+            <div class="card-body">
+                {% include 'gallery/inc/_log_in_form.html' %}
+            </div>
+        </div>        
+        {% block links %}{% endblock %}
+    </div>
+    
+    {% block errors %}
+        {% if form.errors %}
+        <div class="position-absolute bottom-0 start-50 translate-middle-x">
+            <div class="mx-auto alert alert-danger" role="alert">
+            {{ form.errors }}
+            {{ form.non_field_errors }}
+            </div>
+        </div>
+        {% endif %}
+    {% endblock %}
+</body>
+</html>
