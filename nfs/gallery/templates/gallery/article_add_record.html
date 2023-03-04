@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load form_tags %}
 
 {% block content %}
 <div class="container border rounded m-3 p-4">
@@ -6,7 +7,7 @@
     {% if messages %}
     <ul class="messages">
         {% for message in messages %}
-        <div class="alert alert-danger d-flex align-items-center" role="alert">
+        <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} d-flex align-items-center" role="alert">
             <div class="text-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %}">
                 {{ message }}
             </div>
@@ -15,10 +16,10 @@
     </ul>
     {% endif %}
 
-    {% for item in queryset %}
+    {% for item in object_list %}
     <form action="" method="post" class="fs-6">
         {% csrf_token %}
-        <input type="hidden" name="position" value="{{ item.position }}">
+        {% populate_record_form item.position %}
         <div class="mx-auto" style="width: fit-content;">
             <button type="submit" class="btn btn-outline-success p-0 ps-1 pe-1">Add record</button>
         </div>
@@ -46,13 +47,13 @@
     </div>
     {% endfor %}
 
-    <form action="" method="post" class="fs-6 text-center">
+    <form action="" method="post" class="mb-2 fs-6 text-center">
         {% csrf_token %}
-        <input type="hidden" name="position" value="{{ last_pos }}">
+        {% populate_record_form last_pos %}
         <button type="submit" class="btn btn-outline-success p-0 ps-1 pe-1">Add record</button>
     </form>
 
     <a href="{% url 'article_edit' object.pk %}" class="btn btn-outline-success">Return to editing</a>
-    <a href="{% url 'article' object.pk %}" class="btn btn-outline-success">Open to read</a>
+    <a href="{% url 'article' object.pk %}" class="btn btn-outline-info">Open to read</a>
 </div>
 {% endblock%}

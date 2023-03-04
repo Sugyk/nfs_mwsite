@@ -33,3 +33,7 @@ class NotesForm(forms.ModelForm):
         }
 
 NotesFormset = forms.modelformset_factory(extra=0, model=CarNote, form=NotesForm, can_delete=True)
+
+
+class AddRecordForm(forms.Form):
+    position = forms.IntegerField(widget=forms.HiddenInput())

@@ -1,6 +1,6 @@
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.views.generic.edit import CreateView, UpdateView, DeleteView, FormView
+from django.views.generic.edit import CreateView, UpdateView
 
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth.models import User
@@ -13,14 +13,9 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 
 
-from django.shortcuts import render, redirect, get_object_or_404
+from django.shortcuts import get_object_or_404
 
 from django.db.models import F
-
-
-from django.conf import settings
-
-from django.http import HttpResponseNotAllowed
 
 from .models import Car, Profile, CarInfo, CarNote
 from .forms import ProfileEditForm, ArticleCreateForm, NotesFormset
@@ -175,20 +170,51 @@ class ArticleEditView(UpdateView):
         return reverse_lazy('article_edit', args=[pk])
 
 
-def add(request, pk):
-    object = CarInfo.objects.get(pk=pk)
-    if request.method == 'POST':
-        position = int(request.POST.get('position'))
-        queryset = CarNote.objects.filter(note_id=pk)
+class AddNoteView(ListView):
+    template_name = 'gallery/article_add_record.html'
+
+    def get_object(self):
+        pk = self.kwargs.get('pk')
+        object = CarInfo.objects.get(pk=pk)
+        return object
+
+    def get_queryset(self):
+        pk = self.kwargs.get('pk')
+        return CarNote.objects.filter(note_id=pk).order_by('position')
+
+    def post(self, *args, **kwargs):
+        position = int(self.request.POST.get('position'))
+        queryset = self.get_queryset()
         if position in range(len(queryset) + 1):
-            CarNote.objects.filter(position__gte=position).update(position=F('position') + 1)
+            object = self.get_object()
+            queryset.filter(position__gte=position).update(position=F('position') + 1)
             CarNote.objects.create(position=position, note_id=object)
+            messages.success(self.request, 'Record created succesfully!')
         else:
-            messages.error(request, 'Document deleted.')
-    context = {'object': object}
-    queryset = CarNote.objects.filter(note_id=pk).order_by('position')
-    last_pos = len(queryset)
-    context['last_pos'] = last_pos
-    context['queryset'] = queryset
-    
-    return render(request, 'gallery/article_add_record.html', context=context)
+            messages.error(self.request, 'Record creating failed.')
+        return self.get(self.request)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        data['object'] = self.get_object()
+        data['last_pos'] = len(self.get_queryset())
+        return data
+
+# def add(request, pk):
+#     object = CarInfo.objects.get(pk=pk)
+#     if request.method == 'POST':
+#         position = int(request.POST.get('position'))
+#         queryset = CarNote.objects.filter(note_id=pk)
+#         if position in range(len(queryset) + 1):
+#             CarNote.objects.filter(position__gte=position).update(position=F('position') + 1)
+#             CarNote.objects.create(position=position, note_id=object)
+#             messages.success(request, 'Record created succesfully!')
+#         else:
+#             messages.error(request, 'Document deleted.')
+#     context = {'object': object}
+#     queryset = CarNote.objects.filter(note_id=pk).order_by('position')
+#     last_pos = len(queryset)
+#     context['last_pos'] = last_pos
+#     context['queryset'] = queryset
+#     return render(request, 'gallery/article_add_record.html', context=context)
