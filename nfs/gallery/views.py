@@ -134,7 +134,7 @@ class ArticleView(DetailView):
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data['form'] = NotesFormset(queryset=CarNote.objects.filter(note_id=self.kwargs.get('pk')))
+        data['queryset'] = CarNote.objects.filter(note_id=self.get_object()).order_by('position')
         return data
 
 
