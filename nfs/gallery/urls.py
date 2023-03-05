@@ -23,6 +23,7 @@ urlpatterns = [
     path('login/', LoginUser.as_view(), name='login'),
     path('logout/', LogoutUser.as_view(), name='logout'),
 
-    path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
+    path('profile/', ProfileView.as_view(), name='profile'),
+    # path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
     path('profile/update/', ProfileEdit.as_view(), name='profile_update'),
 ]
