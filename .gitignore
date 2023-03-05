@@ -2,4 +2,4 @@ venv/
 nfs/media/
 
 **/__pycache__/
-nfs/db.sqlite3
+nfs/db1.sqlite3
