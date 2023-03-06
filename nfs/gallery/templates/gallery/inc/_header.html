@@ -3,7 +3,7 @@
     Car:
     <a href="{% url 'car' object.car.pk %}">{{ object.car }}</a>
 </p>
-<p class="m-0">Author: <a href="#" class="text-decoration-none">{{ object.author }}</a></p>
+<p class="m-0">Author: <a href="{% url 'other_profile' object.author.pk %}" class="text-decoration-none">{{ object.author }}</a></p>
 <p class="m-0">Created: {{ object.created_at|date:"Y.m.d; h:m" }}</p>
 <p class="m-0">Last update: {{ object.updated_at|date:"Y.m.d; h:m" }}</p>
 <br>

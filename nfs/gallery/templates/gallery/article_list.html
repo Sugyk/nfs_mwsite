@@ -21,7 +21,7 @@
                 <h5 class="card-title">{{ item|capfirst }}</h5>
             </a>
             <div>
-                Author: <a href="#" class="text-reset text-decoration-none">
+                Author: <a href="{% url 'other_profile' item.author.pk %}" class="text-reset text-decoration-none">
                     {{ item.author }}
                 </a>
                 {% if item.author == user %}

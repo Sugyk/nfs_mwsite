@@ -31,7 +31,7 @@
                     <div class="card-body">
                         <h5 class="card-title">{{ item.title }}</h5>
                         <p class="fw-light text-muted">Author:<br>
-                            <a href="#" class="text-decoration-none">
+                            <a href="{% url 'other_profile' item.author.pk %}" class="text-decoration-none">
                                 {{ item.author }}
                             </a>
                             {% if item.author == user %}
