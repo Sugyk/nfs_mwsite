@@ -63,6 +63,20 @@ class ProfileEdit(UpdateView):
     def get_success_url(self):
         success_url = reverse_lazy('profile')
         return success_url
+    
+
+class ProfileVisitView(DetailView):
+    model = User
+    template_name = 'gallery/profile_visit.html'
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        pk = self.kwargs.get('pk')
+        queryset = CarInfo.objects.filter(author=pk).order_by('-created_at')
+        data['posts'] = queryset[:4]
+        if len(queryset) > 4:
+            data['more'] = True
+        return data
 
 
 class UserCreateView(CreateView):

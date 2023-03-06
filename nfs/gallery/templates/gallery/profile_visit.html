@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="border border-light-subtle rounded m-3 p-3">
+    <div class="row mb-2">
+        <div class="col-5">
+            <img src="{{ object.profile.image.url }}" alt="" width="100%" class="">
+        </div>
+        <div class="col-5">
+            <h4>
+                {{ object.profile.name }}
+            </h4>
+            <p>
+                {{ object.profile.status }}
+            </p>
+            <div class="text-muted">
+                <label for="date_joined_id">Joined:</label>
+                <p id="date_joined_id">{{ object.date_joined|date:"Y.m.d" }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <h4>
+            {% if object.profile.name %}
+            {{ object.profile.name }}'s posts:
+            {% else %}
+            User's posts:
+            {% endif %}
+        </h4>
+        {% if not posts %}
+            User did not publicate posts yet.
+        {% endif %}
+        {% for item in posts %}
+        <div class="card mb-3">
+            <div class="card-body card_body_margin">
+                <a href="{% url 'article' item.pk %}" class="text-decoration-none">
+                    <h5 class="card-title">{{ item|capfirst }}</h5>
+                </a>
+                <div>
+                    Author: <a href="{% url 'other_profile' object.pk %}" class="text-reset text-decoration-none">
+                        {{ item.author }}
+                    </a>
+                    {% if item.author == user %}
+                    <span class="badge bg-success">You</span>
+                    {% endif %}
+                </div>
+                <div class="text-muted">
+                    {% if item.updated_at != item.created_at %}
+                    Updated:
+                    {{ item.updated_at|date:"Y.m.d; h:m" }}
+                    {% else %}
+                    Created:
+                    {{ item.created_at|date:"Y.m.d; h:m" }}
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if more %}
+        <a href="#" class="btn btn-primary">See all</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

@@ -2,7 +2,7 @@ from django.urls import path
 from .views import (
     CarListView, UserCreateView, LoginUser, LogoutUser,
     BrandListView, ProfileView, ProfileEdit, CarView, ArticleCreateView,
-    ArticleView, ArticleEditView, ArticleList, AddNoteView
+    ArticleView, ArticleEditView, ArticleList, AddNoteView, ProfileVisitView
     )
 
 
@@ -24,6 +24,6 @@ urlpatterns = [
     path('logout/', LogoutUser.as_view(), name='logout'),
 
     path('profile/', ProfileView.as_view(), name='profile'),
-    # path('profile/<int:pk>', ProfileView.as_view(), name='profile'),
+    path('profile/<int:pk>', ProfileVisitView.as_view(), name='other_profile'),
     path('profile/update/', ProfileEdit.as_view(), name='profile_update'),
 ]
